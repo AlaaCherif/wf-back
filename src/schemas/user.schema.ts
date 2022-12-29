@@ -44,6 +44,16 @@ export class LoginDto {
   @MinLength(6)
   password: string;
 }
+
+export class UpdateUserDto {
+  @IsEmail()
+  email: string;
+  @IsNotEmpty()
+  lastName: string;
+  @IsNotEmpty()
+  name: string;
+  password: string;
+}
 export const UserSchema = SchemaFactory.createForClass(User);
 UserSchema.pre('save', function (next) {
   let now = new Date();
