@@ -31,6 +31,9 @@ export class UserService {
   async getUser(email: string): Promise<User> {
     return this.userModel.findOne({ email: email }).select('-password');
   }
+  async getUserById(id: string): Promise<User> {
+    return this.userModel.findById(id).select('-password');
+  }
   async getUsers(): Promise<User[]> {
     return this.userModel.find().select('-password');
   }

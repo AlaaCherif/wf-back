@@ -1,12 +1,7 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import {
-  IsNotEmpty,
-  IsMongoId,
-  IsNumber,
-  IsDate,
-  IsDateString,
-} from 'class-validator';
+import { IsNotEmpty, IsMongoId, IsNumber, IsDateString } from 'class-validator';
 import mongoose, { HydratedDocument } from 'mongoose';
+import { User } from './user.schema';
 
 export type PostDocument = HydratedDocument<Post>;
 
@@ -28,6 +23,12 @@ export class Post {
   destination: string;
   @Prop()
   price: number;
+  @Prop({
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', maxlength: 3 }],
+  })
+  applicants: User[];
+  @Prop({ default: 3, max: 3 })
+  place_count: number;
 }
 
 export class CreatePostDto {
@@ -42,5 +43,13 @@ export class CreatePostDto {
   destination: string;
   @IsNumber()
   price: number;
+  @IsNumber()
+  place_count: number;
+}
+export class ApplyToPostDto {
+  @IsMongoId()
+  user_id: string;
+  @IsMongoId()
+  post_id: string;
 }
 export const PostSchema = SchemaFactory.createForClass(Post);
