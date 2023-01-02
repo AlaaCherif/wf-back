@@ -4,11 +4,10 @@ import {
   Get,
   Param,
   Post,
-  Query,
   Res,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Header, Headers, Put } from '@nestjs/common/decorators';
+import { Headers, Put } from '@nestjs/common/decorators';
 import {
   ForbiddenException,
   NotFoundException,
@@ -28,6 +27,7 @@ export class UserController {
     private tokenService: TokenService,
   ) {}
   @Get()
+  //get all users
   async getUsers(@Res() response) {
     const users = await this.userService.getUsers();
     return response.json(users);
@@ -38,6 +38,7 @@ export class UserController {
     const user = await this.userService.getUser(email);
     response.json(user);
   }
+  //create user account
   @Post()
   async createUser(@Res() response, @Body() createUserDto: CreateUserDto) {
     const newUser = await this.userService.createUser(createUserDto);
@@ -53,6 +54,7 @@ export class UserController {
     });
   }
   @Post('login')
+  //login
   async login(@Res() response, @Body() loginDto: LoginDto) {
     const user = await this.userService.login(loginDto);
     if (!user) throw new UnauthorizedException('Incorrect credentials');
@@ -66,6 +68,7 @@ export class UserController {
       token,
     });
   }
+  //update user
   @Put('update')
   async updateUser(
     @Res() response,

@@ -18,6 +18,9 @@ export class PostService {
   async getPost(id: string) {
     return this.postModel.findById(id);
   }
+  async getUserPosts(id: string) {
+    return this.postModel.find({ poster_id: id });
+  }
   async createPost(createPostDto: CreatePostDto): Promise<Post> {
     const poster = await this.userService.getUser(createPostDto.poster_id);
     if (!poster) throw new BadRequestException();

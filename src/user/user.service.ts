@@ -27,16 +27,19 @@ export class UserService {
     const createdUser = await new this.userModel(createUserDto).save();
     return createdUser;
   }
-
+  //get user by email
   async getUser(email: string): Promise<User> {
     return this.userModel.findOne({ email: email }).select('-password');
   }
+  //get user by id
   async getUserById(id: string): Promise<User> {
     return this.userModel.findById(id).select('-password');
   }
+  //get all users
   async getUsers(): Promise<User[]> {
     return this.userModel.find().select('-password');
   }
+  //login
   async login(loginDto: LoginDto) {
     const foundUser = await this.userModel.findOne({ email: loginDto.email });
     if (!foundUser) return null;
@@ -44,6 +47,7 @@ export class UserService {
     if (!match) return null;
     return foundUser;
   }
+  //update user
   async updateUser(updateUserDto: UpdateUserDto) {
     const foundUser = await this.userModel.findOne({
       email: updateUserDto.email,

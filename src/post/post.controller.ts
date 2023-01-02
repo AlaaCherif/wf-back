@@ -28,10 +28,12 @@ export class PostController {
     private userService: UserService,
   ) {}
   @Get()
+  //get posts
   async getPosts(@Res() response) {
     const posts = await this.postService.getPosts();
     return response.json(posts);
   }
+  //get posts by id
   @Get('post/:id')
   async getPost(@Res() response, @Param('id') id: string) {
     if (!isMongoId(id)) throw new BadRequestException();
@@ -39,13 +41,24 @@ export class PostController {
     if (!post) throw new NotFoundException();
     return response.json(post);
   }
+  @Get('user-posts/:id')
+  async getUserPosts(@Res() res, @Param('id') id: string) {
+    if (!isMongoId(id)) throw new BadRequestException();
+    const user = await this.userService.getUserById(id);
+    if (!user) throw new NotFoundException();
+    const posts = await this.postService.getUserPosts(id);
+    return res.json(posts);
+  }
   @Post()
+  //create a post
   @UseGuards(AuthGuard)
   async createPost(@Res() response, @Body() createPostDto: CreatePostDto) {
     const post = await this.postService.createPost(createPostDto);
     return response.json(post);
   }
   @Delete('/:id')
+  //delete post
+  //also checks if the user that made the delete request is the owner of the post
   @UseGuards(AuthGuard)
   async deletePost(
     @Res() response,
