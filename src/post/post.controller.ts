@@ -11,6 +11,7 @@ import { Delete, Headers, Param } from '@nestjs/common/decorators';
 import {
   ForbiddenException,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common/exceptions';
 import { isMongoId } from 'class-validator';
 import { AuthGuard } from 'src/auth/auth.guard';
@@ -41,7 +42,7 @@ export class PostController {
     if (!post) throw new NotFoundException();
     return response.json(post);
   }
-  @Get('user-posts/:id')
+  @Get('user_posts/:id')
   async getUserPosts(@Res() res, @Param('id') id: string) {
     if (!isMongoId(id)) throw new BadRequestException();
     const user = await this.userService.getUserById(id);
@@ -87,6 +88,7 @@ export class PostController {
     const user: User = await this.userService.getUserById(
       applyToPostDto.user_id,
     );
+    if (!user) throw new UnauthorizedException();
     if (user.email !== tokenContent.email) throw new ForbiddenException();
     const application = await this.postService.applyToPost(
       applyToPostDto.post_id,

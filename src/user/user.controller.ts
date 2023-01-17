@@ -32,6 +32,11 @@ export class UserController {
     const users = await this.userService.getUsers();
     return response.json(users);
   }
+  @Get('/user_id/:id')
+  async getUserById(@Param('id') id, @Res() response) {
+    const user = await this.userService.getUserById(id);
+    response.json(user);
+  }
   //get user by email
   @Get('/user/:email')
   async getUser(@Param('email') email: string, @Res() response) {
