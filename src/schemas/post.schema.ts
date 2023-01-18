@@ -35,7 +35,6 @@ export class CreatePostDto {
   @IsMongoId()
   poster_id: string;
   @IsNotEmpty()
-  @IsDateString()
   departs_at: Date;
   @IsNotEmpty()
   start: string;

@@ -22,7 +22,7 @@ export class PostService {
     return this.postModel.find({ poster_id: id });
   }
   async createPost(createPostDto: CreatePostDto): Promise<Post> {
-    const poster = await this.userService.getUser(createPostDto.poster_id);
+    const poster = await this.userService.getUserById(createPostDto.poster_id);
     if (!poster) throw new BadRequestException();
     const createdCat = new this.postModel(createPostDto).save();
     return createdCat;
